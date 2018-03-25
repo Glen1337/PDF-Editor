@@ -1,0 +1,98 @@
+﻿<Window x:Class="PDFConverter.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:PDFConverter.ViewModel"
+        xmlns:control="clr-namespace:PDFConverter"
+        Title="PDF Converter" Background="#FF9B9B9B"
+        MinHeight="450" Height="450" MinWidth="550" Width="650" MaxHeight="550">
+    <Window.Resources>
+        <Style TargetType="Label">
+            <Setter Property="Margin" Value="6,0"/>
+            <Setter Property="Padding" Value="0"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
+            <Setter Property="Margin" Value="6,4"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="6,4"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
+        </Style>
+        <Style TargetType="ProgressBar">
+            <!--<Setter Property="Visibility" Value="Hidden"/>-->
+            <Setter Property="Margin" Value="6,4"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
+            <Setter Property="Maximum" Value="100"/>
+        </Style>
+    </Window.Resources>
+    <!--<Window.DataContext>
+        <local:ViewModel/>
+    </Window.DataContext>-->
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height ="2*"/>
+            <RowDefinition Height ="2*"/>
+            <RowDefinition Height ="2.5*"/>
+            <RowDefinition Height ="2*"/>
+            <RowDefinition Height ="2*"/>
+            <RowDefinition Height =".8*"/>
+            <RowDefinition Height ="2*"/>
+            <RowDefinition Height ="2.5*"/>
+            <RowDefinition Height ="2*"/>
+            <RowDefinition Height ="2*"/>
+            <RowDefinition Height =".5*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Select PDF -->
+        <Label FontWeight="Bold" Content="Select PDF" VerticalAlignment="Bottom"/>
+        <control:FileControl FilePath="{Binding PdfFile, Mode=TwoWay}" Grid.Row="1" Grid.Column="1"/>
+        <TextBox Text="{Binding PdfFile}" Grid.Row="1"/>
+
+        <Label FontWeight="Bold" VerticalContentAlignment="Bottom" Content="Extract WPs or Separate by WPs" Grid.Row="2"/>
+
+        <!-- Select output path for extracted/split PDF -->
+        <TextBox Text="{Binding EditOutputPath}" Grid.Row="3"/>
+        <control:FolderControl FolderPath="{Binding EditOutputPath, Mode=TwoWay}" Grid.Column="1" Grid.Row="3"/>
+
+        <!-- Separate by WPs -->
+        <Button Command="{Binding SplitCommand}" Content="Separate by WP"  Grid.Column="1" Grid.Row="4"/>
+        <ProgressBar Value="{Binding SplitProgress}" Grid.Row="4"/>
+
+        <!-- Extract WPs -->
+        <Label Grid.Row="5" Content="Select a text file that contains WPs to extract" VerticalContentAlignment="Bottom"/>
+        <Grid Grid.Row="6">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"></RowDefinition>
+                <RowDefinition Height ="1*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*"></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <control:FileControl VerticalContentAlignment="Stretch" FilePath="{Binding WPsToExtractFile, Mode=TwoWay}" Grid.Column ="1" Margin="-5,-4,0,-4"/>
+            <TextBox Text="{Binding WPsToExtractFile, Mode=TwoWay}" FontSize="10" Margin="6,0,0,0"/>
+            <ProgressBar Value="{Binding ExtractProgress}" Grid.ColumnSpan="2" Margin="5.5,0" Grid.Row="1"/>
+        </Grid>
+        <Button Command="{Binding ExtractCommand}" Content="Extract WPs" Grid.Column="1" Grid.Row="6"/>
+
+        <Label FontWeight="Bold" Grid.Row="7" Content="Export PDF Data" VerticalContentAlignment="Bottom"/>
+        <control:FileControl Grid.Row="8" Grid.Column="1" FilePath="{Binding ExportFile, Mode=TwoWay}" />
+        <TextBox Grid.Row="8" Text="{Binding ExportFile, Mode=TwoWay}"/>
+        <Button Content="Export Info" Command="{Binding ExportDataCommand}" Grid.Column="1" Grid.Row="9"/>
+        <ProgressBar Value="{Binding ExportProgress}"  Grid.Row="9"/>
+
+    </Grid>
+</Window>
