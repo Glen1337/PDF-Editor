@@ -9,6 +9,13 @@ namespace PDFConverter.Model
 {
     public static class Config
     {
+
+        // Config Keys
+         public static readonly String PdfFile = "PdfFile";
+         public static readonly String EditOutputPath = "EditOutputPath";
+         public static readonly String WPsToExtractFile = "WPsToExtractFile";
+         public static readonly String ExportFile = "ExportFile";
+
         public static String ReadSettingFor(String LookupKey)
         {
             String resultValue = String.Empty;
@@ -18,7 +25,11 @@ namespace PDFConverter.Model
             {
                 appSettings = ConfigurationManager.AppSettings;
             }
-            catch { throw new ConfigurationErrorsException("Could not access config app settings."); }
+            catch 
+            { 
+                //throw new ConfigurationErrorsException("Could not access config app settings.");
+                return null;
+            }
 
             resultValue = appSettings[LookupKey];
             
@@ -37,7 +48,11 @@ namespace PDFConverter.Model
                 configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
                 appSettings = configFile.AppSettings.Settings;
             }
-            catch { throw new ConfigurationErrorsException("Could not access exe or app config file."); }
+            catch
+            { 
+                //throw new ConfigurationErrorsException("Could not access exe or app config file.");
+                return;
+            }
 
             if (appSettings[Key] == null) { appSettings.Add(Key, ValueToAdd); }
             else { appSettings[Key].Value = ValueToAdd; }

@@ -3,9 +3,17 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:PDFConverter.ViewModel"
         xmlns:control="clr-namespace:PDFConverter"
-        Title="PDF Converter" Background="#FF9B9B9B"
-        MinHeight="450" Height="450" MinWidth="550" Width="650" MaxHeight="550">
+        Title="PDF Converter"
+        MinHeight="400" Height="450" MinWidth="550" Width="650" MaxHeight="600">
     <Window.Resources>
+        <Style x:Key="cmdBtn" TargetType="Button">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
+            <Setter Property="Margin" Value="8,4"/>
+        </Style>
         <Style TargetType="Label">
             <Setter Property="Margin" Value="6,0"/>
             <Setter Property="Padding" Value="0"/>
@@ -14,7 +22,7 @@
             <Setter Property="Padding" Value="0"/>
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
             <Setter Property="VerticalAlignment" Value="Stretch"/>
-            <Setter Property="Margin" Value="6,4"/>
+            <Setter Property="Margin" Value="8,4"/>
         </Style>
         <Style TargetType="TextBox">
             <Setter Property="Padding" Value="0"/>
@@ -33,6 +41,12 @@
             <Setter Property="Maximum" Value="100"/>
         </Style>
     </Window.Resources>
+    <Window.Background>
+        <RadialGradientBrush SpreadMethod="Reflect">
+            <GradientStop Color="#FF747474"/>
+            <GradientStop Color="#FF9A9A9A" Offset="1"/>
+        </RadialGradientBrush>
+    </Window.Background>
     <!--<Window.DataContext>
         <local:ViewModel/>
     </Window.DataContext>-->
@@ -68,7 +82,7 @@
         <control:FolderControl FolderPath="{Binding EditOutputPath, Mode=TwoWay}" Grid.Column="1" Grid.Row="3"/>
 
         <!-- Separate by WPs -->
-        <Button Command="{Binding SplitCommand}" Content="Separate by WP"  Grid.Column="1" Grid.Row="4"/>
+        <Button Style="{StaticResource cmdBtn}" Command="{Binding SplitCommand}" Content="Separate by WP"  Grid.Column="1" Grid.Row="4"/>
         <ProgressBar Value="{Binding SplitProgress}" Grid.Row="4"/>
 
         <!-- Extract WPs -->
@@ -82,17 +96,17 @@
                 <ColumnDefinition Width="4*"></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <control:FileControl VerticalContentAlignment="Stretch" FilePath="{Binding WPsToExtractFile, Mode=TwoWay}" Grid.Column ="1" Margin="-5,-4,0,-4"/>
+            <control:FileControl VerticalContentAlignment="Stretch" Padding="0" FilePath="{Binding WPsToExtractFile, Mode=TwoWay}" Grid.Column ="1" Margin="-7,-4,-2,-4"/>
             <TextBox Text="{Binding WPsToExtractFile, Mode=TwoWay}" FontSize="10" Margin="6,0,0,0"/>
             <ProgressBar Value="{Binding ExtractProgress}" Grid.ColumnSpan="2" Margin="5.5,0" Grid.Row="1"/>
         </Grid>
-        <Button Command="{Binding ExtractCommand}" Content="Extract WPs" Grid.Column="1" Grid.Row="6"/>
+        <Button Style="{StaticResource cmdBtn}" Command="{Binding ExtractCommand}" Content="Extract WPs" Grid.Column="1" Grid.Row="6"/>
 
         <Label FontWeight="Bold" Grid.Row="7" Content="Export PDF Data" VerticalContentAlignment="Bottom"/>
         <control:FileControl Grid.Row="8" Grid.Column="1" FilePath="{Binding ExportFile, Mode=TwoWay}" />
         <TextBox Grid.Row="8" Text="{Binding ExportFile, Mode=TwoWay}"/>
-        <Button Content="Export Info" Command="{Binding ExportDataCommand}" Grid.Column="1" Grid.Row="9"/>
+        <Button Style="{StaticResource cmdBtn}" Content="Export Info" Command="{Binding ExportDataCommand}" Grid.Column="1" Grid.Row="9" BorderThickness="40,2">
+        </Button>
         <ProgressBar Value="{Binding ExportProgress}"  Grid.Row="9"/>
-
     </Grid>
 </Window>

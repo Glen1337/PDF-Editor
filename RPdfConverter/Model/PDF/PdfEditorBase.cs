@@ -71,5 +71,16 @@ namespace PDFConverter.Model
             return strategy;
         }
 
+        public static String ExtractWP(String inString, Boolean blank)
+        {
+            String wp = String.Empty;
+            // –
+            System.Text.RegularExpressions.Regex wpRegex = new System.Text.RegularExpressions.Regex(@"^\d{4}–");
+            wp = wpRegex.Match(inString).Value;
+            if (blank) { wp = wp.Replace("/blank", " ").Replace('–', ' '); }
+            else { wp = wp.Replace('–', ' '); }
+            return wp.Trim();
+        }
+
     }
 }

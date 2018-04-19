@@ -103,14 +103,14 @@ namespace PDFConverter.Model
                         if (pageFieldRegex.IsMatch(currentText))
                         {
                             currentPageField = pageFieldRegex.Match(currentText).Value.Trim();
-                            currentWP = Utils.ExtractWP(currentPageField, false);
+                            currentWP = ExtractWP(currentPageField, false);
                         }
                         else
                         {
                             if (pageFieldBlankRegex.IsMatch(currentText))
                             {
                                 currentPageField = pageFieldBlankRegex.Match(currentText).Value.Trim();
-                                currentWP = Utils.ExtractWP(currentPageField, true);
+                                currentWP = ExtractWP(currentPageField, true);
                             }
                             else
                             {

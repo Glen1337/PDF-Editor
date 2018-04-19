@@ -62,13 +62,15 @@ namespace PDFConverter.ViewModel
             // Stop background worker and save path properties in config file when main window is being closed
             App.appclosingEventHandler += delegate(object sender)
             {
-                if (PdfFile.isFilePathOK(".pdf")) { Model.Config.AddSettingFor("PdfFile", PdfFile); }
-                if (EditOutputPath.isDirectoryPathOK()) { Model.Config.AddSettingFor("EditOutputPath", EditOutputPath); }
-                if (WPsToExtractFile.isFilePathOK(".txt")) { Model.Config.AddSettingFor("WPsToExtractFile", WPsToExtractFile); }
-                if (ExportFile.isFilePathOK(".txt")) { Model.Config.AddSettingFor("ExportFile", ExportFile); }
+                if (PdfFile.isFilePathOK(".pdf")) { Model.Config.AddSettingFor(Model.Config.PdfFile, PdfFile); }
+                if (EditOutputPath.isDirectoryPathOK()) { Model.Config.AddSettingFor(Model.Config.EditOutputPath, EditOutputPath); }
+                if (WPsToExtractFile.isFilePathOK(".txt")) { Model.Config.AddSettingFor(Model.Config.WPsToExtractFile, WPsToExtractFile); }
+                if (ExportFile.isFilePathOK(".txt")) { Model.Config.AddSettingFor(Model.Config.ExportFile, ExportFile); }
 
                 StopWorker();
             };
+
+            MainThreadDispatcher = Dispatcher.CurrentDispatcher;
 
             //Application.Current.MainWindow.Closing += delegate(object sender, System.ComponentModel.CancelEventArgs e)
             //{
@@ -86,28 +88,28 @@ namespace PDFConverter.ViewModel
         /* Bound Properties */
         /********************/
 
-        private String _PdfFile = Model.Config.ReadSettingFor("PdfFile") ?? "PDF File Path";
+        private String _PdfFile = Model.Config.ReadSettingFor(Model.Config.PdfFile) ?? "PDF File Path";
         public String PdfFile
         {
             get { return _PdfFile; }
             set { _PdfFile = value; RaisePropertyChangedEvent("PdfFile"); }
         }
 
-        private String _EditOutputPath = Model.Config.ReadSettingFor("EditOutputPath") ?? "Output Path";
+        private String _EditOutputPath = Model.Config.ReadSettingFor(Model.Config.EditOutputPath) ?? "Output Path";
         public String EditOutputPath
         {
             get { return _EditOutputPath; }
             set { _EditOutputPath = value; RaisePropertyChangedEvent("EditOutputPath"); }
         }
 
-        private String _WPsToExtractFile = Model.Config.ReadSettingFor("WPsToExtractFile") ?? "File with WPs to extract";
+        private String _WPsToExtractFile = Model.Config.ReadSettingFor(Model.Config.WPsToExtractFile) ?? "File with WPs to extract";
         public String WPsToExtractFile
         {
             get { return _WPsToExtractFile; }
             set { _WPsToExtractFile = value; RaisePropertyChangedEvent("WPsToExtractFile"); }
         }
 
-        private String _ExportFile = Model.Config.ReadSettingFor("ExportFile") ?? "File to export info into";
+        private String _ExportFile = Model.Config.ReadSettingFor(Model.Config.ExportFile) ?? "File to export info into";
         public String ExportFile
         {
             get { return _ExportFile; }
@@ -255,12 +257,26 @@ namespace PDFConverter.ViewModel
 
                     String result  = (String)e.Result;
 
-                    TaskDialog d = new TaskDialog() { Content = result, WindowTitle = "Processing Complete" };
-                    d.Buttons.Add(new TaskDialogButton("Copy to clipboard and cancel"));
-                    d.Buttons.Where((s) => s.ButtonType == ButtonType.Custom).First().Owner.ButtonClicked +=
-                        (object sender2, TaskDialogItemClickedEventArgs ea) =>
-                            { System.Windows.Clipboard.SetText(result); };
-                    d.Show();
+                    #region Show result dialog using ookii dialogs
+                    //TaskDialog d = new TaskDialog() { Content = result, WindowTitle = "Processing Complete" };
+                    //d.Buttons.Add(new TaskDialogButton("Copy to clipboard and cancel"));
+                    //d.Buttons.Where((s) => s.ButtonType == ButtonType.Custom).First().Owner.ButtonClicked +=
+                    //    (object sender2, TaskDialogItemClickedEventArgs ea) =>
+                    //        { System.Windows.Clipboard.SetText(result); };
+                    //d.Show();
+                    #endregion
+
+                    // show result dialog using wpf user control
+                    Window window = new Window()
+                    {
+                        Title = "PDF processing result",
+                        Topmost = true,
+                        ResizeMode = ResizeMode.NoResize,
+                        Content = new ResultDialog(result),
+                        SizeToContent = SizeToContent.WidthAndHeight
+                    };
+
+                    window.Show();
                 };
 
                 BWorker.ProgressChanged += (object sender, ProgressChangedEventArgs e) =>
