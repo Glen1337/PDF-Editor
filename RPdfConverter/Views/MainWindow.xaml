@@ -4,7 +4,7 @@
         xmlns:local="clr-namespace:PDFConverter.ViewModel"
         xmlns:control="clr-namespace:PDFConverter"
         Title="PDF Converter"
-        MinHeight="400" Height="450" MinWidth="550" Width="650" MaxHeight="600">
+        MinHeight="440" Height="450" MinWidth="450" Width="650" MaxHeight="700">
     <Window.Resources>
         <Style x:Key="cmdBtn" TargetType="Button">
             <Setter Property="FontSize" Value="12"/>
